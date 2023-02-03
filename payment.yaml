@@ -1,0 +1,58 @@
+openapi: 3.0.3
+info:
+  title: Card transactions specifications
+  version: 1.0.0
+  description: ISO 8583 is an international standard for financial transaction card originated interchange messaging.
+servers: 
+  - url: http://localhost:8080/api/v1
+paths:
+  /transaction/search:
+    get:
+      responses:
+        200:
+          description: Transactions populated succesfully
+  /transaction/perform:
+    post:
+      description: Perform a transaction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cardNumber:
+                  type: string
+                amount:
+                  type: number
+                transactionDate:
+                  type: string
+      responses:
+        201:
+          description: Transaction done successfully
+  /transactions:
+    get:
+      parameters:
+        - in: query
+          name: rrn
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: stan
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: transactionDate
+          schema:
+            type: string
+            format: date-time
+          required: false
+        - in: query
+          name: cardNumber
+          schema:
+            type: string
+            pattern: (?<!\d)\d{16}(?!\d)
+      responses:
+        200:
+          description: List of transactions populated successfully
